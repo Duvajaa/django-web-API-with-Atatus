@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
+from ddtrace import tracer, patch_all
+from ddtrace.contrib.django import patch
+
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,8 +42,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'weather_api'
+    'weather_api',
+    'atatus.contrib.django',
 ]
+
+ATATUS = {
+   'APP_NAME': 'Doodoo',
+   'LICENSE_KEY': os.getenv("ATATUS_LICENSE_KEY"),
+   'DEBUG': True  # Please uncomment this line if you are running in development/debug mode. Otherwise, we do not send data.
+}
+
+# tracer.configure(
+#     hostname='127.0.0.1',  # or the IP of your Datadog agent
+#     port=8126
+# )
+
+# patch_all()  
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
